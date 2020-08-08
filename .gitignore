@@ -1,1 +1,4 @@
 .idea/
+wandb/
+test.py
+qlearning/agents/__pycache__/

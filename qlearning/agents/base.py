@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-class Agent:
+class BaseAgent:
 
     def __init__(self, env_name):
         self.env = gym.make(env_name)
@@ -35,7 +35,17 @@ class Agent:
             self.env.action_space.shape
         )
 
-    def _get_action(self):
+    def get_action(self, state):
         if self.is_env_discrete:
             return self._discrete_action()
         return self._continuos_action()
+
+    def act(self, iterations, render=True):
+        state = self.env.reset()
+        for _ in range(iterations):
+            action = self.get_action(state)
+            state, reward, done, info = self.env.step(action)
+            if render:
+                self.env.render()
+            if done:
+                break
