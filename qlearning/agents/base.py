@@ -1,3 +1,4 @@
+import os
 import gym
 import random
 import numpy as np
@@ -8,9 +9,9 @@ class BaseAgent:
     def __init__(self, env_name):
         self.env = gym.make(env_name)
         self.is_env_discrete = type(self.env.action_space) == gym.spaces.discrete.Discrete
-        self._display_details()
+        self.display_details()
 
-    def _display_details(self):
+    def display_details(self):
         print(
             'Observation Space Range: ({}, {})'.format(
                 self.env.observation_space.high, self.env.observation_space.high
@@ -25,10 +26,10 @@ class BaseAgent:
                 )
             )
 
-    def _discrete_action(self):
+    def discrete_action(self, state):
         return random.choice(range(self.env.action_space.n))
 
-    def _continuos_action(self):
+    def continuos_action(self, state):
         return np.random.uniform(
             self.env.action_space.low,
             self.env.action_space.high,
@@ -37,15 +38,14 @@ class BaseAgent:
 
     def get_action(self, state):
         if self.is_env_discrete:
-            return self._discrete_action()
-        return self._continuos_action()
+            return self.discrete_action(state)
+        return self.continuos_action(state)
 
     def act(self, iterations, render=True):
         state = self.env.reset()
         for _ in range(iterations):
-            action = self.get_action(state)
-            state, reward, done, info = self.env.step(action)
+            os.system('clear')
             if render:
                 self.env.render()
-            if done:
-                break
+            action = self.get_action(state)
+            state, reward, done, info = self.env.step(action)
