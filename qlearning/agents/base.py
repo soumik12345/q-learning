@@ -9,7 +9,6 @@ class BaseAgent:
     def __init__(self, env_name):
         self.env = gym.make(env_name)
         self.is_env_discrete = type(self.env.action_space) == gym.spaces.discrete.Discrete
-        self.display_details()
 
     def display_details(self):
         print(
@@ -41,17 +40,20 @@ class BaseAgent:
             return self.discrete_action(state)
         return self.continuos_action(state)
 
-    def act(self, iterations, render=True):
+    def act(self, iterations, render=True, collect_frames=True):
         state = self.env.reset()
         frames = []
         for _ in range(iterations):
             os.system('clear')
             if render:
-                frame = self.env.render(mode='rgb_array')
-                frames.append(frame)
+                if collect_frames:
+                    frame = self.env.render(mode='rgb_array')
+                    frames.append(frame)
+                else:
+                    self.env.render()
             action = self.get_action(state)
             state, reward, done, info = self.env.step(action)
-        if render:
+        if render and collect_frames:
             frames = np.array(frames)
             frames = np.transpose(frames, (0, 3, 1, 2))
             return frames
