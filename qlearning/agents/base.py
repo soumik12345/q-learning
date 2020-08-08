@@ -1,5 +1,6 @@
 import os
 import gym
+import wandb
 import random
 import numpy as np
 
@@ -53,6 +54,7 @@ class BaseAgent:
                     self.env.render()
             action = self.get_action(state)
             state, reward, done, info = self.env.step(action)
+            wandb.log({'reward': reward})
         if render and collect_frames:
             frames = np.array(frames)
             frames = np.transpose(frames, (0, 3, 1, 2))
