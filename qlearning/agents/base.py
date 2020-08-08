@@ -2,14 +2,12 @@ import os
 import gym
 import random
 import numpy as np
-from gym.wrappers import Monitor
 
 
 class BaseAgent:
 
     def __init__(self, env_name):
         self.env = gym.make(env_name)
-        # self.env = Monitor(self.env, './video', force=True)
         self.is_env_discrete = type(self.env.action_space) == gym.spaces.discrete.Discrete
         self.display_details()
 
