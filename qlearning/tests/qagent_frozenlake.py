@@ -23,11 +23,11 @@ def run_test():
             'initialization_scale': 1e-4
         }
     )
-    agent.train(episodes=400, render=True, log_metrics=False)
+    agent.train(episodes=400, render=True, log_metrics=True)
     train_total_reward = agent.total_reward
     test_total_reward = agent.act(
         iterations=200, render=True,
-        collect_frames=False, log_metrics=False
+        collect_frames=False, log_metrics=True
     )
     print('Total reward in Training: {}'.format(train_total_reward))
     print('Total reward in Testing: {}'.format(test_total_reward))
