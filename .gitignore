@@ -3,4 +3,4 @@ wandb/
 test.py
 .DS_Store
 qlearning/agents/__pycache__/
-qlearning/tests/__pycache__/
+qlearning/experiments/__pycache__/
