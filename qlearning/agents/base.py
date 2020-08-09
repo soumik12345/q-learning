@@ -7,8 +7,10 @@ import numpy as np
 
 class BaseAgent:
 
-    def __init__(self, env_name):
+    def __init__(self, env_name: str):
         self.env = gym.make(env_name)
+        self.state_size = self.env.observation_space.n
+        self.action_size = self.env.action_space.n
         self.is_env_discrete = type(self.env.action_space) == gym.spaces.discrete.Discrete
 
     def display_details(self):
@@ -27,7 +29,7 @@ class BaseAgent:
             )
 
     def discrete_action(self, state):
-        return random.choice(range(self.env.action_space.n))
+        return random.choice(range(self.action_size))
 
     def continuos_action(self, state):
         return np.random.uniform(
@@ -41,8 +43,16 @@ class BaseAgent:
             return self.discrete_action(state)
         return self.continuos_action(state)
 
-    def act(self, iterations, render=True, collect_frames=True):
+    def train_step(self, experience: tuple):
+        pass
+
+    def train(self, episodes: int):
+        for episode in range(episodes):
+            self.train_step(())
+
+    def act(self, iterations, render=True, collect_frames=True, log_metrics=True):
         state = self.env.reset()
+        total_reward = 0
         frames = []
         for _ in range(iterations):
             os.system('clear')
@@ -54,11 +64,16 @@ class BaseAgent:
                     self.env.render()
             action = self.get_action(state)
             state, reward, done, info = self.env.step(action)
-            wandb.log({'reward': reward})
+            total_reward += reward
+            if log_metrics:
+                wandb.log({'test_reward': reward})
+            if done:
+                break
         if render and collect_frames:
             frames = np.array(frames)
             frames = np.transpose(frames, (0, 3, 1, 2))
-            return frames
+            return frames, total_reward
+        return total_reward
 
     def close_env(self):
         self.env.close()

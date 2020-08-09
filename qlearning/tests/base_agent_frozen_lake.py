@@ -1,4 +1,3 @@
-import wandb
 from gym.envs.registration import register
 from qlearning.agents.base import BaseAgent
 
