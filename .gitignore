@@ -4,3 +4,4 @@ test.py
 .DS_Store
 qlearning/agents/__pycache__/
 qlearning/experiments/__pycache__/
+qlearning/experiments/qagent/__pycache__/
